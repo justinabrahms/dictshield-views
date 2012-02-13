@@ -45,7 +45,7 @@ view (akin to database views) in order to minimize transportation
 costs.
 
 ## Overview
-dictshield-views provides ~View~ objects, which allow you to customize the
+dictshield-views provides `View` objects, which allow you to customize the
 representation of the original object. Views can be though of in two
 major groups: restrictive views or transformational views.
 
@@ -112,15 +112,15 @@ field.
 
 
 ## How it works
-~RestrictiveView~ works by overriding the ~__getattr__()~ method. In
+`RestrictiveView` works by overriding the `__getattr__()` method. In
 the case of a whitelist, if the requested attribute isn't in the set
 of fields in the white list, an AttributeError is raised. If it is in
 the set, the call is proxied back to the instance of the Document.
 
-~TransformativeView~ is a bit different. When you attempt to get the
+`TransformativeView` is a bit different. When you attempt to get the
 backing attribute of the Document underlying the view, it is run
-through processing (assuming the attribute is in the ~transformable~
-list), and the result is returned. The ~transform~ method is given a
+through processing (assuming the attribute is in the `transformable`
+list), and the result is returned. The `transform` method is given a
 copy of the value from the underlying value.
 
 ## Concerns
