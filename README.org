@@ -1,29 +1,27 @@
 * dictshield-views
 dictshield-views provides data transformations on DictShield objects.
 ** TL;DR (Show me the code!)
-<pre><code>
-    #+begin_src python
-      from dictshield.documents import Document
-      from dictshield.views import View
+#+begin_src python
+  from dictshield.documents import Document
+  from dictshield.views import View
 
-      class Public(WhitelistView):
-       fields = ['name', 'body']
+  class Public(WhitelistView):
+   fields = ['name', 'body']
 
-      class Post(Document):
-       name = StringField()
-       body = StringField()
-       username = StringField()
-       password = PasswordField()
+  class Post(Document):
+   name = StringField()
+   body = StringField()
+   username = StringField()
+   password = PasswordField()
 
-      >>> entry = Post(**{'name':'1', 'body':'2', 'username':'3', 'password':'4'})
-      >>> Public(entry).name
-      '1'
-      >>> Public(entry).password
-      UnknownField / Unauthorized Access Exception
-      # (haven't thought what makes sense here)
+  >>> entry = Post(**{'name':'1', 'body':'2', 'username':'3', 'password':'4'})
+  >>> Public(entry).name
+  '1'
+  >>> Public(entry).password
+  UnknownField / Unauthorized Access Exception
+  # (haven't thought what makes sense here)
 
-    #+end_src
-</code></pre>
+#+end_src
 ** Definitions
 - DictShield, a modeling layer to serve as transport from python dicts
   to objects. https://github.com/j2labs/dictshield
@@ -50,48 +48,43 @@ major groups: restrictive views or transformational views.
 A great example of a restrictive view is a field white or
 black list. Given the object:
 
-<pre><code>
-    #+begin_src python
-      from dictshield.document import Document
-      from dictshield.fields import StringField
+#+begin_src python
+  from dictshield.document import Document
+  from dictshield.fields import StringField
 
-      class User(Document):
-        username = StringField();
-        full_name = StringField();
-        password = PasswordField();
-        bio = StringField();
-    #+end_src
-</code></pre>
+  class User(Document):
+    username = StringField();
+    full_name = StringField();
+    password = PasswordField();
+    bio = StringField();
+#+end_src
 
 When we serialize this a client app, we may want to strip out some
 data so it isn't leaked (such as their password).
 
-<pre><code>
-    #+begin_src python
-      class PublicView(RestrictiveView):
-          blacklist=['password']
-    #+end_src
-</code></pre>
+#+begin_src python
+  class PublicView(RestrictiveView):
+      blacklist=['password']
+#+end_src
+
 This is an example view which blacklists access to the password field.
 You can instantiate these views with a Document that at least has a
 password field. Access to all other fields acts as normal, but when
 requesting a field under restriction, an exception is raised.
 
-<pre><code>
-    #+begin_src python
-    >>> user = User(**{'username':'justinlilly',
-    ...   'full_name':'Justin Lilly',
-    ...   'password':'s3cur3!',
-    ...   'bio': 'Born, now just trying to survive.'})
-    >>> public_user = PublicView(user)
-    >>> user.password
-    "s3cur3!"
-    >>> public_user.password
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    AttributeError: 'PublicView' object has no attribute 'password'
-    #+end_src
-</code></pre>
+#+begin_src python
+>>> user = User(**{'username':'justinlilly',
+...   'full_name':'Justin Lilly',
+...   'password':'s3cur3!',
+...   'bio': 'Born, now just trying to survive.'})
+>>> public_user = PublicView(user)
+>>> user.password
+"s3cur3!"
+>>> public_user.password
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'PublicView' object has no attribute 'password'
+#+end_src
 
 The other main type of views are transformative views. These views
 serve to alter the content of the underlying Document. A fun example
@@ -100,22 +93,21 @@ be a curse word filter, a view which will on-the-fly scale images into
 a scaled down size or compositing multiple fields into a synthetic
 field.
 
-<pre><code>
-    #+begin_src python
-      class PirateSpeak(TransformativeView):
-        transformable=['bio', 'full_name']
+#+begin_src python
+  class PirateSpeak(TransformativeView):
+    transformable=['bio', 'full_name']
 
-        def transform(self, field_name, value):
-          if field_name == 'full_name':
-            names = value.split()
-            names[-1] = "Blackbeard"
-            value = ' '.join(names)
-          elif field_name == 'bio':
-            value = pirateify(value)
-          return value
+    def transform(self, field_name, value):
+      if field_name == 'full_name':
+        names = value.split()
+        names[-1] = "Blackbeard"
+        value = ' '.join(names)
+      elif field_name == 'bio':
+        value = pirateify(value)
+      return value
 
-    #+end_src
-</code></pre>
+#+end_src
+
 ** How it works
 ~RestrictiveView~ works by overriding the ~__getattr__()~ method. In
 the case of a whitelist, if the requested attribute isn't in the set
