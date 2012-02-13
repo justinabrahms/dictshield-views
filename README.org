@@ -1,6 +1,7 @@
 * dictshield-views
 dictshield-views provides data transformations on DictShield objects.
 ** TL;DR (Show me the code!)
+<pre><code>
     #+begin_src python
       from dictshield.documents import Document
       from dictshield.views import View
@@ -22,6 +23,7 @@ dictshield-views provides data transformations on DictShield objects.
       # (haven't thought what makes sense here)
 
     #+end_src
+</code></pre>
 ** Definitions
 - DictShield, a modeling layer to serve as transport from python dicts
   to objects. https://github.com/j2labs/dictshield
@@ -48,6 +50,7 @@ major groups: restrictive views or transformational views.
 A great example of a restrictive view is a field white or
 black list. Given the object:
 
+<pre><code>
     #+begin_src python
       from dictshield.document import Document
       from dictshield.fields import StringField
@@ -58,20 +61,23 @@ black list. Given the object:
         password = PasswordField();
         bio = StringField();
     #+end_src
+</code></pre>
 
 When we serialize this a client app, we may want to strip out some
 data so it isn't leaked (such as their password).
 
+<pre><code>
     #+begin_src python
       class PublicView(RestrictiveView):
           blacklist=['password']
     #+end_src
-
+</code></pre>
 This is an example view which blacklists access to the password field.
 You can instantiate these views with a Document that at least has a
 password field. Access to all other fields acts as normal, but when
 requesting a field under restriction, an exception is raised.
 
+<pre><code>
     #+begin_src python
     >>> user = User(**{'username':'justinlilly',
     ...   'full_name':'Justin Lilly',
@@ -85,6 +91,7 @@ requesting a field under restriction, an exception is raised.
       File "<stdin>", line 1, in <module>
     AttributeError: 'PublicView' object has no attribute 'password'
     #+end_src
+</code></pre>
 
 The other main type of views are transformative views. These views
 serve to alter the content of the underlying Document. A fun example
@@ -93,6 +100,7 @@ be a curse word filter, a view which will on-the-fly scale images into
 a scaled down size or compositing multiple fields into a synthetic
 field.
 
+<pre><code>
     #+begin_src python
       class PirateSpeak(TransformativeView):
         transformable=['bio', 'full_name']
@@ -107,6 +115,7 @@ field.
           return value
 
     #+end_src
+</code></pre>
 ** How it works
 ~RestrictiveView~ works by overriding the ~__getattr__()~ method. In
 the case of a whitelist, if the requested attribute isn't in the set
