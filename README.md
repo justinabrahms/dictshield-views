@@ -2,6 +2,7 @@
 dictshield-views provides data transformations on DictShield objects.
 ## TL;DR (Show me the code!)
 
+```python
     from dictshield.documents import Document
     from dictshield.views import View
 
@@ -23,6 +24,7 @@ dictshield-views provides data transformations on DictShield objects.
     '1'
     >>> Public(entry).password
     AttributeError: 'Public' doesn't contain the attribute 'entry'
+```
 
 ## Definitions
 - DictShield, a modeling layer to serve as transport from python dicts
@@ -52,6 +54,7 @@ major groups: restrictive views or transformational views.
 A great example of a restrictive view is a field white or
 black list. Given the object:
 
+```python
     from dictshield.document import Document
     from dictshield.fields import StringField
 
@@ -60,22 +63,22 @@ black list. Given the object:
       full_name = StringField();
       password = PasswordField();
       bio = StringField();
-
+```
 
 When we serialize this a client app, we may want to strip out some
 data so it isn't leaked (such as their password).
 
-
+```python
     class PublicView(RestrictiveView):
         blacklist=['password']
-
+```
 
 This is an example view which blacklists access to the password field.
 You can instantiate these views with a Document that at least has a
 password field. Access to all other fields acts as normal, but when
 requesting a field under restriction, an exception is raised.
 
-
+```python
     >>> user = User(**{'username':'justinlilly',
     ...   'full_name':'Justin Lilly',
     ...   'password':'s3cur3!',
@@ -87,7 +90,7 @@ requesting a field under restriction, an exception is raised.
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
     AttributeError: 'PublicView' object has no attribute 'password'
-
+```
 
 The other main type of views are transformative views. These views
 serve to alter the content of the underlying Document. A fun example
@@ -97,6 +100,7 @@ a scaled down size or compositing multiple fields into a synthetic
 field.
 
 
+```python
     class PirateSpeak(TransformativeView):
       transformable=['bio', 'full_name']
 
@@ -108,7 +112,7 @@ field.
         elif field_name == 'bio':
           value = pirateify(value)
         return value
-
+```
 
 
 ## How it works
