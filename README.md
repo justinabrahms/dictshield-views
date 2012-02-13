@@ -35,8 +35,8 @@ dictshield-views provides data transformations on DictShield objects.
   and javascript for rich client apps. http://code.google.com/webtoolkit/
 
 ## Background
-The idea for dictshield-views came from a discussion on brubeck-dev. [[https://github.com/j2labs/][James
-Dennis]] was thinking of how to represent permissioning on a per-field
+The idea for dictshield-views came from a discussion on brubeck-dev. James
+Dennis was thinking of how to represent permissioning on a per-field
 basis for DictShield Documents. The concept of whitelisting and
 blacklisting fields came up, which reminded me of data transformations
 provided by GWT's RequestFactory proxies. With these proxies, you can
@@ -131,8 +131,8 @@ I haven't done much thinking as to how this could be mitigated, but
 doesn't seem untractable.
 
 ## References
-- [[https://github.com/j2labs/dictshield][DictShield]]
-- [[http://code.google.com/webtoolkit/doc/latest/DevGuideRequestFactory.html#proxies][GWT RequestFactory Proxies]]
+- DictShield https://github.com/j2labs/dictshield
+- GWT RequestFactory Proxies http://code.google.com/webtoolkit/doc/latest/DevGuideRequestFactory.html#proxies
 
 ## TODOs
 - TODO(justinlilly): Does requiring the backing model to have a
