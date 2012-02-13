@@ -33,6 +33,7 @@ dictshield-views provides data transformations on DictShield objects.
 
 - GWT, a Java web framework which translates Java code into HTML, CSS
   and javascript for rich client apps. http://code.google.com/webtoolkit/
+
 ## Background
 The idea for dictshield-views came from a discussion on brubeck-dev. [[https://github.com/j2labs/][James
 Dennis]] was thinking of how to represent permissioning on a per-field
@@ -42,6 +43,7 @@ provided by GWT's RequestFactory proxies. With these proxies, you can
 transform your server-side representation of an object to a smaller
 view (akin to database views) in order to minimize transportation
 costs.
+
 ## Overview
 dictshield-views provides ~View~ objects, which allow you to customize the
 representation of the original object. Views can be though of in two
@@ -120,15 +122,18 @@ backing attribute of the Document underlying the view, it is run
 through processing (assuming the attribute is in the ~transformable~
 list), and the result is returned. The ~transform~ method is given a
 copy of the value from the underlying value.
+
 ## Concerns
 My biggest concern here is that you could build arbitrarily long
 chains of these views, which could cause a performance problem if each
 of them is just proxying back to the previous one to get an attribute.
 I haven't done much thinking as to how this could be mitigated, but
 doesn't seem untractable.
+
 ## References
 - [[https://github.com/j2labs/dictshield][DictShield]]
 - [[http://code.google.com/webtoolkit/doc/latest/DevGuideRequestFactory.html#proxies][GWT RequestFactory Proxies]]
+
 ## TODOs
 - TODO(justinlilly): Does requiring the backing model to have a
   password field matter? Should we just override getattr and if its
